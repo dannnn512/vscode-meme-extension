@@ -4,26 +4,36 @@ import * as path from 'path';
 import { pathToFileURL } from 'url';
 import * as vscode from 'vscode';
 
-const SOUND_FILE_NAME = 'faaah.mp3';
+const SOUND_FILE_NAMES = ['faaah.mp3', 'brain-aneurysm.mp3', 'cat_meme.mp3', 'pipe.mp3', 'rizz.mp3'];
 
 export function activate(context: vscode.ExtensionContext) {
 	const output = vscode.window.createOutputChannel('Meme Error Sound');
-	const soundPath = path.join(context.extensionPath, 'assets', SOUND_FILE_NAME);
 
 	let isPlaying = false;
 	let hasShownMissingAssetWarning = false;
 	let hasShownPlaybackWarning = false;
+	let lastSoundFileName = '';
 
 	const disposable = vscode.window.onDidEndTerminalShellExecution((event) => {
 		if (event.exitCode === 0 || event.exitCode === undefined || isPlaying) {
 			return;
 		}
 
+		let availableSounds = SOUND_FILE_NAMES;
+		if (SOUND_FILE_NAMES.length > 1 && lastSoundFileName) {
+			availableSounds = SOUND_FILE_NAMES.filter(name => name !== lastSoundFileName);
+		}
+
+		const randomSoundFileName = availableSounds[Math.floor(Math.random() * availableSounds.length)];
+		lastSoundFileName = randomSoundFileName;
+
+		const soundPath = path.join(context.extensionPath, 'assets', randomSoundFileName);
+
 		if (!fs.existsSync(soundPath)) {
 			if (!hasShownMissingAssetWarning) {
 				hasShownMissingAssetWarning = true;
 				vscode.window.showWarningMessage(
-					`Meme Error Sound could not find assets/${SOUND_FILE_NAME}.`
+					`Meme Error Sound could not find assets/${randomSoundFileName}.`
 				);
 			}
 			return;
@@ -50,7 +60,7 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(disposable, output);
 }
 
-export function deactivate() {}
+export function deactivate() { }
 
 function playSound(soundPath: string): Promise<void> {
 	const command = getPlayCommand(soundPath);

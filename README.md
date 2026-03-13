@@ -1,13 +1,13 @@
 # Meme Error Sound
 
-A simple VS Code extension that plays `faaah.mp3` when a terminal command ends with a non-zero exit code.
+A simple VS Code extension that randomly plays one of five meme sounds (`faaah.mp3`, `brain-aneurysm.mp3`, `cat_meme.mp3`, `pipe.mp3`, or `rizz.mp3`) when a terminal command ends with a non-zero exit code.
 
 I made this for my own setup after watching IG reels. If other people want to use it too, feel free.
 
 ## What It Does
 
 - Watches terminal commands in VS Code.
-- If a command fails, it plays the meme sound from `assets/faaah.mp3`.
+- If a command fails, it randomly plays a meme sound from the `assets/` folder (`faaah.mp3`, `brain-aneurysm.mp3`, `cat_meme.mp3`, `pipe.mp3`, or `rizz.mp3`).
 - It does not read your files, send data anywhere, scrape anything, mine crypto, or do weird background stuff.
 
 ## Installation
@@ -74,15 +74,19 @@ npm run this-does-not-exist
 
 3. If the command exits with an error, the extension plays the sound effect.
 
-## Sound File
+## Sound Files
 
-The extension uses:
+The extension randomly selects one of the following sounds:
 
 ```text
 assets/faaah.mp3
+assets/brain-aneurysm.mp3
+assets/cat_meme.mp3
+assets/pipe.mp3
+assets/rizz.mp3
 ```
 
-If you want a different sound later, replace that file with another MP3 and keep the same name.
+If you want different sounds later, you can replace these files in the `assets/` folder and update the `SOUND_FILE_NAMES` array in `src/extension.ts`.
 
 ## Notes
 
